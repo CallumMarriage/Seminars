@@ -1,0 +1,1 @@
+Run using : mvn exec:java -Dexec.mainClass=test.Main -Dexec.args="file name"
