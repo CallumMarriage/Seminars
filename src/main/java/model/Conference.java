@@ -97,27 +97,4 @@ public class Conference {
 	public int numOfSeminar(){
 		return talks.size();
 	}
-
-
-	/*
-
-	 * The Main: for a quick unit testing
-	 * @param args*/
-
-	public static void main(String[] args) throws IOException {
-
-		//args[0] = "./src/main/resources/seminars.txt";
-		//if(args[0] != null){
-			try{
-				Conference c = new Conference("./src/main/resources/seminars.txt");
-				for(int i=0; i<c.numOfSeminar(); i++){
-					System.out.println(c.getSeminar(i));
-				}
-			}
-			catch (BadDataFormatException e){
-				System.out.println(e.getMessage());
-			}
-		//}
-	}
-
 }

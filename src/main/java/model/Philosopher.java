@@ -69,17 +69,4 @@ public class Philosopher implements Speaker{
 
 		return sb.toString();
 	}
-
-	/**
-	 * The Main: for quick unit testing
-	 * @param args
-	 * */
-
-	public static void main(String[] args) {
-		Philosopher p = new Philosopher("Doctor Loo");
-		System.out.println(p.introduceOneself());
-		System.out.println(p.speak("In general, polymorphism describes multiple possible states for a single property (it is said to be polymorphic)."));
-
-	}
-
 }

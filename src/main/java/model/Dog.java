@@ -61,16 +61,4 @@ public class Dog implements Speaker {
 		}
 		return sb.toString();
 	}
-
-
-	/**
-	 * The Main -- for a quick unit testing
-	 * @param args
-
-	public static void main(String[] args){
-		Dog d = new Dog("Lucky");
-		System.out.println(d.introduceOneself());
-		System.out.println(d.speak("In general, polymorphism describes multiple possible states for a single property (it is said to be polymorphic)."));
-	}*/
-	
 }
