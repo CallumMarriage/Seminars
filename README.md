@@ -1,4 +1,4 @@
 Seminars
 
 
-To run tests run ```mvn clean install
+To run tests run ```mvn clean install```
