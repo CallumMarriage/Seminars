@@ -1,1 +1,4 @@
-Run using : mvn exec:java -Dexec.mainClass=test.Main -Dexec.args="file name"
+Seminars
+
+
+To run tests run ```mvn clean install
