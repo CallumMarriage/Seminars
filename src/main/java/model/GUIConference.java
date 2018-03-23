@@ -41,8 +41,9 @@ public class GUIConference{
 		 * and exit the application anyway. Hence, we simply reference
 		 * those kinds of exceptions as their superclass Exception. 
 		 */
+		conference = new Conference();
 		try{
-			conference = new Conference(file);
+			conference.readFile(file);
 		}
 		catch (Exception e){
 			showError(e.getMessage());

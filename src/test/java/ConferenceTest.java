@@ -11,19 +11,21 @@ public class ConferenceTest {
 
     @Test(expected = BadDataFormatException.class)
     public void constructorBadFormatTest() throws IOException, BadDataFormatException {
-        Conference conferenceBadFormat = new Conference("./src/test/resources/Bad-Format-Seminar.txt");
+        Conference conferenceBadFormat = new Conference();
+        conferenceBadFormat.readFile("./src/test/resources/Bad-Format-Seminar.txt");
     }
 
     @Test(expected = NumberFormatException.class)
     public void constructorBadNameTest() throws IOException, BadDataFormatException {
-        Conference conferenceBadName = new Conference("./src/test/resources/Bad-Name-Seminar.txt");
+        Conference conferenceBadName = new Conference();
+        conferenceBadName.readFile("./src/test/resources/Bad-Name-Seminar.txt");
 
     }
 
     @Test
     public void constructorGoodFileTest() throws IOException, BadDataFormatException {
-        Conference conferenceGoodFile = new Conference("./src/test/resources/Good-File-Seminar.txt");
-
+        Conference conferenceGoodFile = new Conference();
+        conferenceGoodFile.readFile("./src/test/resources/Good-File-Seminar.txt");
     }
 
 }

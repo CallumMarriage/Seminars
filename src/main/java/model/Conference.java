@@ -22,12 +22,12 @@ public class Conference {
 	/**
 	 * Constructor - read seminar data from file to create the
 	 * contents of the conference
-	 * @param file	name of seminar data file 
 	 */
-	public Conference(String file) throws IOException, NumberFormatException, BadDataFormatException {
-		
+	public Conference(){
 		talks = new ArrayList<Seminar>();
+	}
 
+	public void readFile(String file) throws IOException, BadDataFormatException {
 		File actualFile = new File(file);
 
 		if(!actualFile.exists()){
@@ -65,7 +65,7 @@ public class Conference {
 		}
 		in.close();
 	}
-	
+
 	/**
 	 * Let a specified seminar in the conference proceed.
 	 * @param index	The seminar index

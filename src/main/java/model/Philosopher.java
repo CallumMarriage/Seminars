@@ -40,24 +40,23 @@ public class Philosopher implements Speaker{
 
 		Random random = new Random();
 		//reasonable amount of a-hems
-		int numberOfRandom = random.nextInt(brokenSpeech.length/2) +1;
+		int numberOfAhems = random.nextInt(brokenSpeech.length/2) +1;
 		List<Integer> previousNumbers = new ArrayList<Integer>();
 
 		Boolean alreadyDone = false;
 
-		for(int i = 0; i < numberOfRandom; i++){
-
-			int n = random.nextInt(brokenSpeech.length -1) + 1;
+		for(int i = 0; i <= numberOfAhems; i++){
+			int positionInString = random.nextInt(brokenSpeech.length -1) + 1;
 			for(Integer prevNumber : previousNumbers){
-				if(prevNumber == n){
+				if(prevNumber == positionInString){
 					alreadyDone = true;
 					break;
 				}
 			}
 			if(!alreadyDone) {
-				brokenSpeech[n] = brokenSpeech[n] + " Ah-Hem!";
+				brokenSpeech[positionInString] = brokenSpeech[positionInString] + " Ah-Hem!";
 			}
-			previousNumbers.add(n);
+			previousNumbers.add(positionInString);
 			alreadyDone = false;
 		}
 
