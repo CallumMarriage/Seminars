@@ -12,6 +12,7 @@ public class Student implements Speaker {
     public Student(String name){
         this.name = name;
     }
+
     public String introduceOneself() {
         return speak(NAME_INTRO + name + ". " + THANKS );
     }
@@ -22,7 +23,6 @@ public class Student implements Speaker {
      * @param speech the content of the speech that is to be made
      * @return speach altered
      */
-    //Student says errrmm. before the start of every sentence.
     public String speak(String speech) {
         String[] speachAsArray = speech.split("\\.");
         StringBuilder sb = new StringBuilder();

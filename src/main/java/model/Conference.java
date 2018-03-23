@@ -19,20 +19,26 @@ public class Conference {
 	private int nextSeminar = 0;
 	
 	/**
-	 * Constructor - read seminar data from file to create the
-	 * contents of the conference
+	 * Constructor - build Conference object containing list of seminars
 	 */
 	public Conference(){
 		talks = new ArrayList<List<Seminar>>();
 	}
 
+	/**
+	 * read seminar data from file to create the
+	 * contents of the conference
+	 *
+	 * @param  file
+	 * @throws IOException
+	 * @throws BadDataFormatException
+	 */
 	public void readFile(String file) throws IOException, BadDataFormatException {
 		File actualFile = new File(file);
 
 		if(!actualFile.exists()){
 			throw new IOException("The file does not exist");
 		}
-
 		// read seminar records from data file
 		Scanner in = new Scanner(actualFile);
 		// read records one by one
@@ -42,23 +48,17 @@ public class Conference {
 
 			//check if all of the data is included
 			if(attributes.length == 7 || attributes.length == 5  ){
-				String title = attributes[0];
+                List<Seminar> seminarParts = new ArrayList<Seminar>();
+
+                String title = attributes[0];
 				String content = attributes[1];
 				String partOneName = attributes[2];
-				String partTwoName;
-				int type2;
-
-				List<Seminar> seminarParts = new ArrayList<Seminar>();
-
-				int type;
-				type = Integer.parseInt(attributes[3]);
+                int type = Integer.parseInt(attributes[3]);
 
 				if(attributes[4].equals("2")) {
-					partTwoName = attributes[5];
-					type2 = Integer.parseInt(attributes[6]);
-
+					String partTwoName = attributes[5];
+					int type2 = Integer.parseInt(attributes[6]);
 					String[] contentInHalves = getContentSplitIntoHalves(content);
-
 					seminarParts.add(new Seminar(title, contentInHalves[0], partOneName, type));
 					seminarParts.add(new Seminar(title, contentInHalves[1], partTwoName, type2));
 				} else{
@@ -75,6 +75,13 @@ public class Conference {
 	}
 
 
+	/**
+	 * This takes the content and splits it when there are more than one lecturer.
+	 * It will split it so they have a roughly even number of sentences to say.
+	 *
+	 * @param content
+	 * @return an array containing the first and second halves of the content
+	 */
 	private String[] getContentSplitIntoHalves(String content){
 		StringBuilder firstHalfContent = new StringBuilder();
 		StringBuilder secondHalfConetnt = new StringBuilder();
@@ -104,12 +111,12 @@ public class Conference {
 	 */
 	private String getSeminar(int index){
 		List<Seminar> seminarParts = talks.get(index);
-		StringBuilder wholeSeminer = new StringBuilder();
+		StringBuilder wholeSeminar = new StringBuilder();
 		for(Seminar seminar : seminarParts){
-			wholeSeminer.append(seminar.proceed());
+			wholeSeminar.append(seminar.proceed());
 
 		}
-		return wholeSeminer.toString();
+		return wholeSeminar.toString();
 	}
 	
 	/**
@@ -122,8 +129,9 @@ public class Conference {
 				nextSeminar++;
 				return content;
 			}
-		else
-			throw new ArrayIndexOutOfBoundsException("No more seminars.\n");
+		else {
+            throw new ArrayIndexOutOfBoundsException("No more seminars.\n");
+        }
 	}
 	
 	/**
