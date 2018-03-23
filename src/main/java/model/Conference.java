@@ -52,32 +52,27 @@ public class Conference {
 
                 String title = attributes[0];
 				String content = attributes[1];
-				String partOneName = attributes[2];
-                int type = Integer.parseInt(attributes[3]);
+				
+                int numberOfLecturers = Integer.parseInt(attributes[2]);
+                int lec = 2;
 
-                int numberOfLecturers = Integer.parseInt(attributes[4]);
-                int lec = 4;
-
+                //make a map of all the lecturers and their types.
                 Map<String, Integer> lecturers = new HashMap<String, Integer>();
-                lecturers.put(partOneName, type);
+
+                for(int lecturer = 1; lecturer <= numberOfLecturers; lecturer++){
+                    int currentName = lec + 1;
+                    String additionalLecturerName = attributes[currentName];
+                    int type = Integer.parseInt(attributes[currentName +1]);
+                    lec += 2;
+                    lecturers.put(additionalLecturerName, type);
+                }
+                String[] contentSplitIntoSections = getContentSplitIntoSections(content,numberOfLecturers);
+                int i = 0;
+                for(String name : lecturers.keySet()){
+                   seminarParts.add(new Seminar(title,contentSplitIntoSections[i], name, lecturers.get(name)));
+                   i++;
+                }
                 
-                if(numberOfLecturers > 1){
-                    for(int additionalLecturer = 2; additionalLecturer <= numberOfLecturers; additionalLecturer++){
-                        int currentName = lec + 1;
-                        String additionalLecturerName = attributes[currentName];
-                        int type2 = Integer.parseInt(attributes[currentName +1]);
-                        lec += 2;
-                        lecturers.put(additionalLecturerName, type2);
-                    }
-                    String[] contentSplitIntoSections = getContentSplitIntoSections(content,numberOfLecturers);
-                    int i = 0;
-                    for(String name : lecturers.keySet()){
-                       seminarParts.add(new Seminar(title,contentSplitIntoSections[i], name, lecturers.get(name)));
-                       i++;
-                    }
-				} else{
-					seminarParts.add(new Seminar(title, content, partOneName, type));
-				}
 				talks.add(seminarParts);
 			} else{
 				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
@@ -108,7 +103,7 @@ public class Conference {
         //remove every lecturer would not have anything to say as the number of lines available is smaller than the number of lecturers
         if(contentLength < numberOfLectures){
             //all lecturers that are in a position above the number of lines must be given a line to show that they can not say anything
-           for(int i = contentLength; i <=  numberOfLectures; i++) {
+           for(int i = contentLength; i <=  numberOfLectures-1; i++) {
                split[i] = "I have nothing to say!";
                //make the number of lecturers equal to the content length as e
            }

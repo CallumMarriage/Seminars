@@ -17,13 +17,6 @@ public class ConferenceTest {
         conferenceBadFormat.readFile("./src/test/resources/Bad-Format-Seminar.txt");
     }
 
-    @Test(expected = BadDataFormatException.class)
-    public void constructorBadNameTest() throws IOException, BadDataFormatException {
-        Conference conferenceBadName = new Conference();
-        conferenceBadName.readFile("./src/test/resources/Bad-Name-Seminar.txt");
-
-    }
-
     @Test
     public void constructorGoodFileTest() throws IOException, BadDataFormatException {
         Conference conferenceGoodFile = new Conference();
