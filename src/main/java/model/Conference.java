@@ -43,33 +43,27 @@ public class Conference {
 		Scanner in = new Scanner(actualFile);
 		// read records one by one
 		while(in.hasNextLine()){
-			String record = in.nextLine();
-			String[] attributes = record.split("\t");
+		    
+			String[] attributes = in.nextLine().split("\t");
 
 			//check if all of the data is included
 			if(attributes.length % 2 != 0 ){
+			    
+			    Map<String, Integer> lecturers = new HashMap<String, Integer>();
                 List<Seminar> seminarParts = new ArrayList<Seminar>();
-
                 String title = attributes[0];
 				String content = attributes[1];
-				
                 int numberOfLecturers = Integer.parseInt(attributes[2]);
-                int lec = 2;
-
-                //make a map of all the lecturers and their types.
-                Map<String, Integer> lecturers = new HashMap<String, Integer>();
+                int positionOfCurrentLecturersName = 3;
 
                 for(int lecturer = 1; lecturer <= numberOfLecturers; lecturer++){
-                    int currentName = lec + 1;
-                    String additionalLecturerName = attributes[currentName];
-                    int type = Integer.parseInt(attributes[currentName +1]);
-                    lec += 2;
-                    lecturers.put(additionalLecturerName, type);
+                    lecturers.put(attributes[positionOfCurrentLecturersName], Integer.parseInt(attributes[positionOfCurrentLecturersName +1]));
+                    //next lecturer's name is 2 positions after the previous lecturer's name
+                    positionOfCurrentLecturersName += 2;
                 }
-                String[] contentSplitIntoSections = getContentSplitIntoSections(content,numberOfLecturers);
                 int i = 0;
                 for(String name : lecturers.keySet()){
-                   seminarParts.add(new Seminar(title,contentSplitIntoSections[i], name, lecturers.get(name)));
+                   seminarParts.add(new Seminar(title,getContentSplitIntoSections(content,numberOfLecturers)[i], name, lecturers.get(name)));
                    i++;
                 }
                 
