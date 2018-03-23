@@ -30,7 +30,6 @@ public class ConferenceTest {
         conferenceGoodFile.readFile("./src/test/resources/Good-File-Seminar.txt");
     }
 
-
     @Test
     public void splitContentType(){
         Conference conference = new Conference();
@@ -49,7 +48,6 @@ public class ConferenceTest {
         assertEquals("This is the content.", results3[0]);
         assertEquals(" With three sentences.", results3[1]);
         assertEquals(" Third one.", results3[2]);
-
     }
 
 }

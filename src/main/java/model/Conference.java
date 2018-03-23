@@ -104,15 +104,23 @@ public class Conference {
         int line = 0;
         int lecturer = 0;
         int contentLength = contentAsList.length;
+
+        //remove every lecturer would not have anything to say as the number of lines available is smaller than the number of lecturers
         if(contentLength < numberOfLectures){
-           for(int i = contentLength; i <=  numberOfLectures; i++){
-              split[i] = "I have nothing to say!";
-              numberOfLectures = contentLength;
+            //all lecturers that are in a position above the number of lines must be given a line to show that they can not say anything
+           for(int i = contentLength; i <=  numberOfLectures; i++) {
+               split[i] = "I have nothing to say!";
+               //make the number of lecturers equal to the content length as e
            }
+            //make the number of lecturers equal to the content length as e
+           numberOfLectures = contentLength;
         }
+        //go through every sentence in the file
         while(line < contentLength){
+            //I split the file down into lecturers. So lecturer one will cover x amount of the lines
             while (lecturer < numberOfLectures) {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder section = new StringBuilder();
+                //if the number of lines is one add the whole content and break as we have no content for the next itteration
                 if(contentLength == 1){
                     split[lecturer] = content;
                     line++;
@@ -120,14 +128,18 @@ public class Conference {
                     break;
                 }                                       
                 for (int sectionNumber = 0; sectionNumber < contentLength / numberOfLectures; sectionNumber++) {
-                    sb.append(contentAsList[line]);
-                    sb.append(".");
+                    //add every line within the section that the current lecturer covers.
+                    //so if there are 3 lecturers and 9 lines, each lecturer would cover a section containing 3 lines
+                    section.append(contentAsList[line]);
+                    section.append(".");
                     line++;
                 }
-                split[lecturer] = sb.toString();
+                //add the section to element of the array that the lecturer is at
+                split[lecturer] = section.toString();
                 lecturer++;
             }
         }
+        //return the array with all of the lines in the contents split into sections, each section associated with a lecturer
         return split;
 	}
 
