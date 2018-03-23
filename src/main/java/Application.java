@@ -5,7 +5,6 @@ import model.GUIConference;
  */
 public class Application {
 
-
     /**
      * The main for starting up this application.
      * This application expect only one command line input argument

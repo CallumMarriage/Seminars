@@ -11,7 +11,8 @@ package model;
 public class Seminar {
 
 	private static final int DOG = 0;
-	
+	private static final int STUDENT = 3;
+
 	private static final String ENDNOTE = "\n Thank you!\n";
 	
 	private String title;		// the seminar title
@@ -31,9 +32,11 @@ public class Seminar {
 		this.content = content;
 		switch(speakerType){		
 		case DOG : current = new Dog(speaker);
-		           break;
+			break;
+		case STUDENT : current = new Student(speaker);
+			break;
 		default : current = new Philosopher(speaker);
-		          break;
+			break;
 		}
 	}
 	

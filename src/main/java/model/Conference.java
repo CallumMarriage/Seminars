@@ -4,7 +4,6 @@ import Exceptions.BadDataFormatException;
 
 import java.util.*;
 import java.io.*;
-import java.util.regex.Pattern;
 
 /**
  * A model.Conference object keeps a record of all seminar records that
@@ -76,7 +75,7 @@ public class Conference {
 	}
 
 
-	public String[] getContentSplitIntoHalves(String content){
+	private String[] getContentSplitIntoHalves(String content){
 		StringBuilder firstHalfContent = new StringBuilder();
 		StringBuilder secondHalfConetnt = new StringBuilder();
 		String[] contentSplitIntoHalves = new String[2];
@@ -89,6 +88,8 @@ public class Conference {
 				secondHalfConetnt.append(contentAsArray[i]);
 			}
 		}
+
+		firstHalfContent.append("\n");
 		contentSplitIntoHalves[0] = firstHalfContent.toString();
 		contentSplitIntoHalves[1] = secondHalfConetnt.toString();
 
@@ -101,7 +102,7 @@ public class Conference {
 	 * @param index	The seminar index
 	 * @return what is said in the seminar
 	 */
-	public String getSeminar(int index){
+	private String getSeminar(int index){
 		List<Seminar> seminarParts = talks.get(index);
 		StringBuilder wholeSeminer = new StringBuilder();
 		for(Seminar seminar : seminarParts){
@@ -113,7 +114,7 @@ public class Conference {
 	
 	/**
 	 * Get the next seminar
-	 * @return
+	 * @return content
 	 */
 	public String getNextSeminar(){
 		if(nextSeminar < numOfSeminar()){

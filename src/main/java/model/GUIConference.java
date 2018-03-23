@@ -20,8 +20,7 @@ public class GUIConference{
 	private JFrame frame;
 	private JTextArea textArea;
 	private JButton nextButton;
-	private JButton exitButton;
-	
+
 	/**
 	 * Constructor
 	 * @param file	the name of the seminar data file
@@ -105,7 +104,7 @@ public class GUIConference{
 		});			
 		
 		// create a button
-		exitButton = new JButton("Exit");
+		JButton exitButton = new JButton("Exit");
 		// nice gray-ish blue background
 		exitButton.setBackground(new Color(116,151,200));
 		exitButton.setForeground(Color.WHITE);
