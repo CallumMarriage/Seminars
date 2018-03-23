@@ -47,7 +47,7 @@ public class Conference {
 			String[] attributes = record.split("\t");
 
 			//check if all of the data is included
-			if(attributes.length == 7 || attributes.length == 5  ){
+			if(attributes.length % 2 != 0 ){
                 List<Seminar> seminarParts = new ArrayList<Seminar>();
 
                 String title = attributes[0];
@@ -55,16 +55,29 @@ public class Conference {
 				String partOneName = attributes[2];
                 int type = Integer.parseInt(attributes[3]);
 
-				if(attributes[4].equals("2")) {
-					String partTwoName = attributes[5];
-					int type2 = Integer.parseInt(attributes[6]);
-					String[] contentInHalves = getContentSplitIntoHalves(content);
-					seminarParts.add(new Seminar(title, contentInHalves[0], partOneName, type));
-					seminarParts.add(new Seminar(title, contentInHalves[1], partTwoName, type2));
+                int numberOfLecturers = Integer.parseInt(attributes[4]);
+                int lec = 4;
+
+                Map<String, Integer> lecturers = new HashMap<String, Integer>();
+                lecturers.put(partOneName, type);
+                
+                if(numberOfLecturers > 1){
+                    for(int additionalLecturer = 2; additionalLecturer <= numberOfLecturers; additionalLecturer++){
+                        int currentName = lec + 1;
+                        String additionalLecturerName = attributes[currentName];
+                        int type2 = Integer.parseInt(attributes[currentName +1]);
+                        lec += 2;
+                        lecturers.put(additionalLecturerName, type2);
+                    }
+                    String[] contentSplitIntoSections = getContentSplitIntoSections(content,numberOfLecturers);
+                    int i = 0;
+                    for(String name : lecturers.keySet()){
+                       seminarParts.add(new Seminar(title,contentSplitIntoSections[i], name, lecturers.get(name)));
+                       i++;
+                    }
 				} else{
 					seminarParts.add(new Seminar(title, content, partOneName, type));
 				}
-
 				talks.add(seminarParts);
 			} else{
 				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
@@ -82,25 +95,40 @@ public class Conference {
 	 * @param content
 	 * @return an array containing the first and second halves of the content
 	 */
-	private String[] getContentSplitIntoHalves(String content){
-		StringBuilder firstHalfContent = new StringBuilder();
-		StringBuilder secondHalfConetnt = new StringBuilder();
-		String[] contentSplitIntoHalves = new String[2];
-		String[] contentAsArray = content.split("\\.");
 
-		for(int i = 0; i < contentAsArray.length; i++){
-			if(i < contentAsArray.length / 2){
-				firstHalfContent.append(contentAsArray[i]);
-			} else{
-				secondHalfConetnt.append(contentAsArray[i]);
-			}
-		}
+	// I want to go through each sentence in a paragraph, whilst value is
+	public String[] getContentSplitIntoSections(String content, int numberOfLectures){
+        String[] contentAsList = content.split("\\.");
+        String[] split = new String[numberOfLectures];
 
-		firstHalfContent.append("\n");
-		contentSplitIntoHalves[0] = firstHalfContent.toString();
-		contentSplitIntoHalves[1] = secondHalfConetnt.toString();
-
-		return contentSplitIntoHalves;
+        int line = 0;
+        int lecturer = 0;
+        int contentLength = contentAsList.length;
+        if(contentLength < numberOfLectures){
+           for(int i = contentLength; i <=  numberOfLectures; i++){
+              split[i] = "I have nothing to say!";
+              numberOfLectures = contentLength;
+           }
+        }
+        while(line < contentLength){
+            while (lecturer < numberOfLectures) {
+                StringBuilder sb = new StringBuilder();
+                if(contentLength == 1){
+                    split[lecturer] = content;
+                    line++;
+                    lecturer++;
+                    break;
+                }                                       
+                for (int sectionNumber = 0; sectionNumber < contentLength / numberOfLectures; sectionNumber++) {
+                    sb.append(contentAsList[line]);
+                    sb.append(".");
+                    line++;
+                }
+                split[lecturer] = sb.toString();
+                lecturer++;
+            }
+        }
+        return split;
 	}
 
 

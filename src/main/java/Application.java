@@ -17,6 +17,7 @@ public class Application {
             //new model.GUIConference(args[0]);
             new GUIConference("./src/main/resources/seminars.txt");
         }
+
         catch (ArrayIndexOutOfBoundsException e){
             System.out.println("Missing input argument");
         }
