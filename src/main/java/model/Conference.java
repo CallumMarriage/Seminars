@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class Conference {
 	// the seminars in this conference
-	private ArrayList<Seminar> talks;
+	private ArrayList<List<Seminar>> talks;
 	// the index of the next seminar that is scheduled to happen 
 	private int nextSeminar = 0;
 	
@@ -24,7 +24,7 @@ public class Conference {
 	 * contents of the conference
 	 */
 	public Conference(){
-		talks = new ArrayList<Seminar>();
+		talks = new ArrayList<List<Seminar>>();
 	}
 
 	public void readFile(String file) throws IOException, BadDataFormatException {
@@ -42,29 +42,56 @@ public class Conference {
 			String[] attributes = record.split("\t");
 
 			//check if all of the data is included
-			if(attributes.length!= 4){
+			if(attributes.length!= 6){
 				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
 			}
 			String title = attributes[0];
 			String content = attributes[1];
-			String name = attributes[2];
+			String partOneName = attributes[2];
+			String partTwoName = attributes[4];
 
-			if(Pattern.matches(".*\\d+.*", name)){
-				throw new BadDataFormatException("Names can not contain numbers");
-			}
-
-			int type = 0;
+			int type;
+			int type2;
 			try {
 				//check if you can parse the 3rd attribute as an integer
 				type = Integer.parseInt(attributes[3]);
+				type2 = Integer.parseInt(attributes[5]);
 			} catch(Exception e){
-				throw new NumberFormatException("The type: " + type + " is not a number.");
+				throw new NumberFormatException("The type: " + attributes[3] + " or " + attributes[5] + " is not a number.");
 			}
 
-			talks.add(new Seminar(title, content, name, type));
+			List<Seminar> seminarParts = new ArrayList<Seminar>();
+
+			String[] contentInHalves = getContentSplitIntoHalves(content);
+
+			seminarParts.add(new Seminar(title, contentInHalves[0], partOneName, type));
+			seminarParts.add(new Seminar(title, contentInHalves[1], partTwoName, type2));
+
+			talks.add(seminarParts);
 		}
 		in.close();
 	}
+
+
+	public String[] getContentSplitIntoHalves(String content){
+		StringBuilder firstHalfContent = new StringBuilder();
+		StringBuilder secondHalfConetnt = new StringBuilder();
+		String[] contentSplitIntoHalves = new String[2];
+		String[] contentAsArray = content.split("\\.");
+
+		for(int i = 0; i < contentAsArray.length; i++){
+			if(i < contentAsArray.length / 2){
+				firstHalfContent.append(contentAsArray[i]);
+			} else{
+				secondHalfConetnt.append(contentAsArray[i]);
+			}
+		}
+		contentSplitIntoHalves[0] = firstHalfContent.toString();
+		contentSplitIntoHalves[1] = secondHalfConetnt.toString();
+
+		return contentSplitIntoHalves;
+	}
+
 
 	/**
 	 * Let a specified seminar in the conference proceed.
@@ -72,8 +99,13 @@ public class Conference {
 	 * @return what is said in the seminar
 	 */
 	public String getSeminar(int index){
-		Seminar seminar = (Seminar) talks.get(index);
-		return seminar.proceed();
+		List<Seminar> seminarParts = talks.get(index);
+		StringBuilder wholeSeminer = new StringBuilder();
+		for(Seminar seminar : seminarParts){
+			wholeSeminer.append(seminar.proceed());
+
+		}
+		return wholeSeminer.toString();
 	}
 	
 	/**
@@ -82,9 +114,9 @@ public class Conference {
 	 */
 	public String getNextSeminar(){
 		if(nextSeminar < numOfSeminar()){
-				Seminar seminar = (Seminar) talks.get(nextSeminar);
+				String content = getSeminar(nextSeminar);
 				nextSeminar++;
-				return seminar.proceed();
+				return content;
 			}
 		else
 			throw new ArrayIndexOutOfBoundsException("No more seminars.\n");
