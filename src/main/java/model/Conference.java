@@ -42,32 +42,35 @@ public class Conference {
 			String[] attributes = record.split("\t");
 
 			//check if all of the data is included
-			if(attributes.length!= 6){
-				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
-			}
-			String title = attributes[0];
-			String content = attributes[1];
-			String partOneName = attributes[2];
-			String partTwoName = attributes[4];
+			if(attributes.length == 7 || attributes.length == 5  ){
+				String title = attributes[0];
+				String content = attributes[1];
+				String partOneName = attributes[2];
+				String partTwoName;
+				int type2;
 
-			int type;
-			int type2;
-			try {
-				//check if you can parse the 3rd attribute as an integer
+				List<Seminar> seminarParts = new ArrayList<Seminar>();
+
+				int type;
 				type = Integer.parseInt(attributes[3]);
-				type2 = Integer.parseInt(attributes[5]);
-			} catch(Exception e){
-				throw new NumberFormatException("The type: " + attributes[3] + " or " + attributes[5] + " is not a number.");
+
+				if(attributes[4].equals("2")) {
+					partTwoName = attributes[5];
+					type2 = Integer.parseInt(attributes[6]);
+
+					String[] contentInHalves = getContentSplitIntoHalves(content);
+
+					seminarParts.add(new Seminar(title, contentInHalves[0], partOneName, type));
+					seminarParts.add(new Seminar(title, contentInHalves[1], partTwoName, type2));
+				} else{
+					seminarParts.add(new Seminar(title, content, partOneName, type));
+				}
+
+				talks.add(seminarParts);
+			} else{
+				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
+
 			}
-
-			List<Seminar> seminarParts = new ArrayList<Seminar>();
-
-			String[] contentInHalves = getContentSplitIntoHalves(content);
-
-			seminarParts.add(new Seminar(title, contentInHalves[0], partOneName, type));
-			seminarParts.add(new Seminar(title, contentInHalves[1], partTwoName, type2));
-
-			talks.add(seminarParts);
 		}
 		in.close();
 	}

@@ -56,7 +56,6 @@ public class Seminar {
 	
 	/**
 	 * The current speaker gives the complete seminar.
-	 * @param speech
 	 * @return what was said in the seminar
 	 */
 	public String proceed(){
