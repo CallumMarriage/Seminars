@@ -50,7 +50,7 @@ public class Conference {
 			String name = attributes[2];
 
 			if(Pattern.matches(".*\\d+.*", name)){
-				throw new NumberFormatException("Names can not contain numbers");
+				throw new BadDataFormatException("Names can not contain numbers");
 			}
 
 			int type = 0;
