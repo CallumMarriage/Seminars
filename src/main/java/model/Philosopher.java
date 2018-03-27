@@ -36,6 +36,7 @@ public class Philosopher implements Speaker{
 	}
 
 	public String speak(String speech) {
+
 		String[] brokenSpeech = speech.split(" ");
 
 		Random random = new Random();

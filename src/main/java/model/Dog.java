@@ -43,21 +43,24 @@ public class Dog implements Speaker {
 		String[] text = speech.split(" ");
 
 		//start at 4 because the 5th word is at position 4 in the array
-		for(int i = 4; i <= text.length-1; i+=5){
-			String word = text[i];
-			//make sure the woof is always added directly after the 5th word.
-			if(!word.contains("\n")){
-				text[i] = word.trim() + " Woof!";
-			} else{
-				text[i] = word.trim() + " Woof!\n";
-			}
-		}
-
+		int numberOfWords = text.length;
 		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < text.length; i++){
-			//make sure it looks like a sentance
-			sb.append(text[i]);
-			if(!text[i].contains("\n") && i != text.length -1){
+
+		for(int i = 1; i <= numberOfWords; i++){
+
+			if(i != 0 && i % 5 == 0){
+				String word = text[i-1];
+				if(!word.contains("\n")){
+					sb.append(word.trim());
+					sb.append(" Woof!");
+				} else{
+					sb.append(word.trim());
+					sb.append(" Woof!\n");
+				}
+			} else{
+				sb.append(text[i-1]);
+			}
+			if(!text[i-1].contains("\n")  && i != numberOfWords){
 				sb.append(" ");
 			}
 		}

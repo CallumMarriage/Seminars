@@ -4,6 +4,7 @@ import Exceptions.BadDataFormatException;
 
 import java.util.*;
 import java.io.*;
+import java.util.stream.IntStream;
 
 /**
  * A model.Conference object keeps a record of all seminar records that
@@ -14,7 +15,7 @@ import java.io.*;
  */
 public class Conference {
 	// the seminars in this conference
-	private ArrayList<List<Seminar>> talks;
+	private List<List<Seminar>> talks;
 	// the index of the next seminar that is scheduled to happen 
 	private int nextSeminar = 0;
 	
@@ -33,8 +34,6 @@ public class Conference {
 			while((line = bufferedReader.readLine()) != null){
 				processLine(line);
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -96,20 +95,22 @@ public class Conference {
         //remove every lecturer would not have anything to say as the number of lines available is smaller than the number of lecturers
         if(contentLength < numberOfLectures){
             //all lecturers that are in a position above the number of lines must be given a line to show that they can not say anything
-           for(int i = contentLength; i <=  numberOfLectures-1; i++) {
+
+			for(int i = contentLength; i <=  numberOfLectures-1; i++) {
 			   lectureSplitByLecturer[i] = "I have nothing to say!";
                //make the number of lecturers equal to the content length as e
-           }
+           	}
             //make the number of lecturers equal to the content length as e
            numberOfLectures = contentLength;
-        }
+		}
 
-        //if the number of lines is one add the whole content and break as we have no content for the next itteration
+        //if the number of lines is one add the whole content and break as we have no content for the next iteration
         if(contentLength == 1){
             lectureSplitByLecturer[lecturer] = content;
             return lectureSplitByLecturer;
         }
 
+		int sizeOfSections = contentLength / numberOfLectures;
         //go through every sentence in the file
         while(line < contentLength){
             //I split the file down into lecturers. So lecturer one will cover x amount of the lines
@@ -117,7 +118,7 @@ public class Conference {
 
                 StringBuilder section = new StringBuilder();
 
-                for (int sectionNumber = 0; sectionNumber < (contentLength / numberOfLectures); sectionNumber++) {
+                for (int positionInSection = 0; positionInSection < sizeOfSections; positionInSection++) {
                     //add every line within the section that the current lecturer covers.
                     //so if there are 3 lecturers and 9 lines, each lecturer would cover a section containing 3 lines
                     section.append(contentAsList[line]);
@@ -132,7 +133,6 @@ public class Conference {
         //return the array with all of the lines in the contents split into sections, each section associated with a lecturer
         return lectureSplitByLecturer;
 	}
-
 
 	/**
 	 * Let a specified seminar in the conference proceed.
