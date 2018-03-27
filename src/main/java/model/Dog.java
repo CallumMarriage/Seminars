@@ -42,21 +42,19 @@ public class Dog implements Speaker {
 		// split the text string into word tokens
 		String[] text = speech.split(" ");
 
-		//start at 4 because the 5th word is at position 4 in the array
 		int numberOfWords = text.length;
 		StringBuilder sb = new StringBuilder();
 
 		for(int i = 1; i <= numberOfWords; i++){
-
 			if(i != 0 && i % 5 == 0){
 				String word = text[i-1];
-				if(!word.contains("\n")){
-					sb.append(word.trim());
-					sb.append(" Woof!");
-				} else{
-					sb.append(word.trim());
-					sb.append(" Woof!\n");
+				sb.append(word.trim());
+				sb.append(" Woof!");
+
+				if(word.contains("\n")){
+					sb.append("\n");
 				}
+
 			} else{
 				sb.append(text[i-1]);
 			}
@@ -64,6 +62,7 @@ public class Dog implements Speaker {
 				sb.append(" ");
 			}
 		}
+
 		return sb.toString();
 	}
 }
