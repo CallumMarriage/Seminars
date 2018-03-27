@@ -40,7 +40,6 @@ public class Conference {
 		}
 	}
 
-
 	/**
 	 * read seminar data from file to create the
 	 * contents of the conference
