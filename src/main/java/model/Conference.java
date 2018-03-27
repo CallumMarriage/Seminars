@@ -53,23 +53,18 @@ public class Conference {
 
         //check if all of the data is included
         if(attributes.length % 2 != 0 ){
-            Map<String, Integer> lecturers = new HashMap<String, Integer>();
             List<Seminar> seminarParts = new ArrayList<Seminar>();
 
             int numberOfLecturers = Integer.parseInt(attributes[2]);
-            int positionOfCurrentLecturersName = 3;
+            int positionOfCurrentLecturersName = 1;
 
-            for(int lecturer = 1; lecturer <= numberOfLecturers; lecturer++){
-                lecturers.put(attributes[positionOfCurrentLecturersName], Integer.parseInt(attributes[positionOfCurrentLecturersName +1]));
+			String[] contentSplitIntSectionsBeyLecturer = getContentSplitIntoSections(attributes[1],numberOfLecturers);
+
+			for(int lecturer = 0; lecturer < numberOfLecturers; lecturer++){
+				//next lecturer's name is 2 positions after the previous lecturer's name
+				positionOfCurrentLecturersName += 2;
+				seminarParts.add(new Seminar(attributes[0], contentSplitIntSectionsBeyLecturer[lecturer], attributes[positionOfCurrentLecturersName],Integer.parseInt(attributes[positionOfCurrentLecturersName + 1])));
                 //next lecturer's name is 2 positions after the previous lecturer's name
-                positionOfCurrentLecturersName += 2;
-            }
-
-            String[] contentSplitIntSectionsBeyLecturer = getContentSplitIntoSections(attributes[1],numberOfLecturers);
-            int i = 0;
-            for(String name : lecturers.keySet()){
-                seminarParts.add(new Seminar(attributes[0], contentSplitIntSectionsBeyLecturer[i], name, lecturers.get(name)));
-                i++;
             }
 
             talks.add(seminarParts);
