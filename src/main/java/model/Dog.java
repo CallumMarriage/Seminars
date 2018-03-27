@@ -45,7 +45,7 @@ public class Dog implements Speaker {
 			String word = text[i];
 			//make sure the woof is always added directly after the 5th word.
 			if(!word.contains("\n")){
-				text[i] = word + " Woof!";
+				text[i] = word.trim() + " Woof!";
 			} else{
 				text[i] = word.trim() + " Woof!\n";
 			}
