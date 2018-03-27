@@ -54,7 +54,7 @@ public class Seminar {
 	 * End the speech by uttering the endnote.
 	 */
 	private String end(){
-		return ENDNOTE;
+		return ENDNOTE + "\n";
 	}
 	
 	/**

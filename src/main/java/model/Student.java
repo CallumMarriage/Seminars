@@ -18,7 +18,7 @@ public class Student implements Speaker {
     }
 
     /**
-     * Converts the students speach to include mannerism (Saying errrmm. at the beginning of every sentence
+     * Converts the students speech to include mannerism (Saying errrmm. at the beginning of every sentence
      *
      * @param speech the content of the speech that is to be made
      * @return speach altered

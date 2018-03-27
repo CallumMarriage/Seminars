@@ -25,55 +25,58 @@ public class Conference {
 		talks = new ArrayList<List<Seminar>>();
 	}
 
+	public void readFile(String file) throws BadDataFormatException {
+		try {
+			FileInputStream fileInputStream = new FileInputStream(file);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader (fileInputStream));
+			String line;
+			while((line = bufferedReader.readLine()) != null){
+				processFile(line);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	/**
 	 * read seminar data from file to create the
 	 * contents of the conference
 	 *
-	 * @param  file
-	 * @throws IOException
-	 * @throws BadDataFormatException
+	 * @param  line each line containing the attributes that define a lecture and its lecturers
+	 * @throws BadDataFormatException Thrown when file does not contain the correct attributes
 	 */
-	public void readFile(String file) throws IOException, BadDataFormatException {
-		File actualFile = new File(file);
+	private void processFile(String line)throws BadDataFormatException {
 
-		if(!actualFile.exists()){
-			throw new IOException("The file does not exist");
-		}
-		// read seminar records from data file
-		Scanner in = new Scanner(actualFile);
-		// read records one by one
-		while(in.hasNextLine()){
-		    
-			String[] attributes = in.nextLine().split("\t");
+	    String[] attributes = line.split("\t");
 
-			//check if all of the data is included
-			if(attributes.length % 2 != 0 ){
-			    
-			    Map<String, Integer> lecturers = new HashMap<String, Integer>();
-                List<Seminar> seminarParts = new ArrayList<Seminar>();
-                String title = attributes[0];
-				String content = attributes[1];
-                int numberOfLecturers = Integer.parseInt(attributes[2]);
-                int positionOfCurrentLecturersName = 3;
+        //check if all of the data is included
+        if(attributes.length % 2 != 0 ){
+            Map<String, Integer> lecturers = new HashMap<String, Integer>();
+            List<Seminar> seminarParts = new ArrayList<Seminar>();
 
-                for(int lecturer = 1; lecturer <= numberOfLecturers; lecturer++){
-                    lecturers.put(attributes[positionOfCurrentLecturersName], Integer.parseInt(attributes[positionOfCurrentLecturersName +1]));
-                    //next lecturer's name is 2 positions after the previous lecturer's name
-                    positionOfCurrentLecturersName += 2;
-                }
-                int i = 0;
-                for(String name : lecturers.keySet()){
-                   seminarParts.add(new Seminar(title,getContentSplitIntoSections(content,numberOfLecturers)[i], name, lecturers.get(name)));
-                   i++;
-                }
-                
-				talks.add(seminarParts);
-			} else{
-				throw new BadDataFormatException("Some elements are missing, you have " + attributes.length + " attributes when you need 4!");
+            int numberOfLecturers = Integer.parseInt(attributes[2]);
+            int positionOfCurrentLecturersName = 3;
 
-			}
-		}
-		in.close();
+            for(int lecturer = 1; lecturer <= numberOfLecturers; lecturer++){
+                lecturers.put(attributes[positionOfCurrentLecturersName], Integer.parseInt(attributes[positionOfCurrentLecturersName +1]));
+                //next lecturer's name is 2 positions after the previous lecturer's name
+                positionOfCurrentLecturersName += 2;
+            }
+
+            int i = 0;
+            for(String name : lecturers.keySet()){
+                seminarParts.add(new Seminar(attributes[0], getContentSplitIntoSections(attributes[1],numberOfLecturers)[i], name, lecturers.get(name)));
+                i++;
+            }
+
+            talks.add(seminarParts);
+        } else{
+            throw new BadDataFormatException("You have too few/many Attributes");
+
+        }
 	}
 
 
@@ -81,14 +84,15 @@ public class Conference {
 	 * This takes the content and splits it when there are more than one lecturer.
 	 * It will split it so they have a roughly even number of sentences to say.
 	 *
-	 * @param content
+	 * @param content the entire content of lecture
+	 * @param numberOfLectures number of lecturers that the content will be split between
 	 * @return an array containing the first and second halves of the content
 	 */
 
 	// I want to go through each sentence in a paragraph, whilst value is
 	public String[] getContentSplitIntoSections(String content, int numberOfLectures){
         String[] contentAsList = content.split("\\.");
-        String[] split = new String[numberOfLectures];
+        String[] lectureSplitByLecturer = new String[numberOfLectures];
 
         int line = 0;
         int lecturer = 0;
@@ -98,25 +102,27 @@ public class Conference {
         if(contentLength < numberOfLectures){
             //all lecturers that are in a position above the number of lines must be given a line to show that they can not say anything
            for(int i = contentLength; i <=  numberOfLectures-1; i++) {
-               split[i] = "I have nothing to say!";
+			   lectureSplitByLecturer[i] = "I have nothing to say!";
                //make the number of lecturers equal to the content length as e
            }
             //make the number of lecturers equal to the content length as e
            numberOfLectures = contentLength;
         }
+
+        //if the number of lines is one add the whole content and break as we have no content for the next itteration
+        if(contentLength == 1){
+            lectureSplitByLecturer[lecturer] = content;
+            return lectureSplitByLecturer;
+        }
+
         //go through every sentence in the file
         while(line < contentLength){
             //I split the file down into lecturers. So lecturer one will cover x amount of the lines
             while (lecturer < numberOfLectures) {
+
                 StringBuilder section = new StringBuilder();
-                //if the number of lines is one add the whole content and break as we have no content for the next itteration
-                if(contentLength == 1){
-                    split[lecturer] = content;
-                    line++;
-                    lecturer++;
-                    break;
-                }                                       
-                for (int sectionNumber = 0; sectionNumber < contentLength / numberOfLectures; sectionNumber++) {
+
+                for (int sectionNumber = 0; sectionNumber < (contentLength / numberOfLectures); sectionNumber++) {
                     //add every line within the section that the current lecturer covers.
                     //so if there are 3 lecturers and 9 lines, each lecturer would cover a section containing 3 lines
                     section.append(contentAsList[line]);
@@ -124,12 +130,12 @@ public class Conference {
                     line++;
                 }
                 //add the section to element of the array that the lecturer is at
-                split[lecturer] = section.toString();
+				lectureSplitByLecturer[lecturer] = section.toString();
                 lecturer++;
             }
         }
         //return the array with all of the lines in the contents split into sections, each section associated with a lecturer
-        return split;
+        return lectureSplitByLecturer;
 	}
 
 
