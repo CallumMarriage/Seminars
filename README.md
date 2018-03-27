@@ -16,9 +16,9 @@ Files used are contained in the resources directory in main.
 
 **0** : Title,
 **1** : Content,
-**2** : First Lecturer Name,
-**3** : First Lecturer Type,
-**4** : Number Of Lecturers 
+**2** : Number Of Lecturers 
+**3** : First Lecturer Name,
+**4** : First Lecturer Type,
 
 *For additional lecturers*
 **5** : Additional Lecturer Name,
