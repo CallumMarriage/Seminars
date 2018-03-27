@@ -31,7 +31,7 @@ public class Conference {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader (fileInputStream));
 			String line;
 			while((line = bufferedReader.readLine()) != null){
-				processFile(line);
+				processLine(line);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class Conference {
 	 * @param  line each line containing the attributes that define a lecture and its lecturers
 	 * @throws BadDataFormatException Thrown when file does not contain the correct attributes
 	 */
-	private void processFile(String line)throws BadDataFormatException {
+	private void processLine(String line)throws BadDataFormatException {
 
 	    String[] attributes = line.split("\t");
 
@@ -65,9 +65,10 @@ public class Conference {
                 positionOfCurrentLecturersName += 2;
             }
 
+            String[] contentSplitIntSectionsBeyLecturer = getContentSplitIntoSections(attributes[1],numberOfLecturers);
             int i = 0;
             for(String name : lecturers.keySet()){
-                seminarParts.add(new Seminar(attributes[0], getContentSplitIntoSections(attributes[1],numberOfLecturers)[i], name, lecturers.get(name)));
+                seminarParts.add(new Seminar(attributes[0], contentSplitIntSectionsBeyLecturer[i], name, lecturers.get(name)));
                 i++;
             }
 

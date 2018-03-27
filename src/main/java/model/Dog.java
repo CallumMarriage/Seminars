@@ -41,6 +41,8 @@ public class Dog implements Speaker {
 	public String speak(String speech) {
 		// split the text string into word tokens
 		String[] text = speech.split(" ");
+
+		//start at 4 because the 5th word is at position 4 in the array
 		for(int i = 4; i <= text.length-1; i+=5){
 			String word = text[i];
 			//make sure the woof is always added directly after the 5th word.
