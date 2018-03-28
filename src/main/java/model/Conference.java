@@ -4,7 +4,6 @@ import Exceptions.BadDataFormatException;
 
 import java.util.*;
 import java.io.*;
-import java.util.stream.IntStream;
 
 /**
  * A model.Conference object keeps a record of all seminar records that
@@ -46,15 +45,17 @@ public class Conference {
 	 * @param  line each line containing the attributes that define a lecture and its lecturers
 	 * @throws BadDataFormatException Thrown when file does not contain the correct attributes
 	 */
-	private void processLine(String line)throws BadDataFormatException {
+	public void processLine(String line)throws BadDataFormatException, NumberFormatException {
 
 	    String[] attributes = line.split("\t");
 
+		int numberOfLecturers = Integer.parseInt(attributes[2]);
+
         //check if all of the data is included
-        if(attributes.length % 2 != 0 ){
+        if(attributes.length == (3 + ( numberOfLecturers * 2))){
+
             List<Seminar> seminarParts = new ArrayList<Seminar>();
 
-            int numberOfLecturers = Integer.parseInt(attributes[2]);
             int positionOfCurrentLecturersName = 1;
 
 			String[] contentSplitIntSectionsBeyLecturer = getContentSplitIntoSections(attributes[1],numberOfLecturers);

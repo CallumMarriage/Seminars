@@ -12,11 +12,16 @@ import static org.junit.Assert.*;
 public class ConferenceTest {
 
     @Test(expected = BadDataFormatException.class)
-    public void constructorBadFormatTest() throws IOException, BadDataFormatException {
+    public void badFormatTest() throws BadDataFormatException {
         Conference conferenceBadFormat = new Conference();
-        conferenceBadFormat.readFile("./src/test/resources/Bad-Format-Seminar.txt");
+        conferenceBadFormat.processLine("name\tdesc\t1\tdave");
     }
 
+    @Test(expected = NumberFormatException.class)
+    public void badNumberExceptionTest() throws NumberFormatException, BadDataFormatException{
+        Conference conference = new Conference();
+        conference.processLine("name\tdesc\ts\tdave\t1");
+    }
     @Test
     public void constructorGoodFileTest() throws IOException, BadDataFormatException {
         Conference conferenceGoodFile = new Conference();
