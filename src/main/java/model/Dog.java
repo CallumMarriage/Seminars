@@ -45,6 +45,8 @@ public class Dog implements Speaker {
 		int numberOfWords = text.length;
 		StringBuilder sb = new StringBuilder();
 
+
+
 		for(int i = 1; i <= numberOfWords; i++){
 			if(i != 0 && i % 5 == 0){
 				String word = text[i-1];

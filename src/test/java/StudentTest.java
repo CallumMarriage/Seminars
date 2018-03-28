@@ -9,6 +9,6 @@ public class StudentTest {
     @Test
     public void testStudentSpeach(){
         Student student = new Student("Steve");
-        assertEquals("Errrmm. My name is dog.", student.speak("My name is dog.") );
+        assertEquals("Errrmm, My name is dog.", student.speak("My name is dog.") );
     }
 }

@@ -24,13 +24,23 @@ public class Student implements Speaker {
      * @return speach altered
      */
     public String speak(String speech) {
-        String[] speechAsArray = speech.split("\\.");
+
+
+        String[] speechAsArray = speech.split("\\. ");
+
         StringBuilder sb = new StringBuilder();
 
         for(int i = 0; i < speechAsArray.length; i++){
 
             String[] lineAsArray = speechAsArray[i].split(" ");
-            lineAsArray[0] = "Errrmm. " + lineAsArray[0];
+
+            String string = "";
+
+            if(i != 0){
+                string = " ";
+            }
+
+            lineAsArray[0] = string + "Errrmm, " + lineAsArray[0];
 
             for(int e = 0; e < lineAsArray.length; e++){
                 sb.append(lineAsArray[e]);
@@ -39,7 +49,9 @@ public class Student implements Speaker {
                 }
             }
 
-            sb.append(".");
+            if(speechAsArray.length != 1) {
+                sb.append(".");
+            }
         }
         return sb.toString();
     }

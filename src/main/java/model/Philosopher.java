@@ -51,13 +51,8 @@ public class Philosopher implements Speaker{
 				brokenSpeech[positionInString] += " Ah-Hem!";
 			}
 		}
-		//rebuild the string from the array. Have to re add the space as it was removed in order to split the array
-		StringBuilder sb = new StringBuilder();
-		for(String item : brokenSpeech){
-			sb.append(item);
-			sb.append(" ");
-		}
+		//rebuild the string from the array.
 
-		return sb.toString();
+		return String.join(" ", brokenSpeech);
 	}
 }
