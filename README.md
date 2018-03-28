@@ -24,7 +24,3 @@ Files used are contained in the resources directory in main.
 **5** : Additional Lecturer Name,
 **6** : Additional Lecturer Type,
 ....
-
-**NOTE**
-
-Lecturers in the same seminar can not have the same name; they can have the same type but not name.
